@@ -362,6 +362,11 @@ export class ActivitiTaskListService {
             .catch(err => this.handleError(err));
     }
 
+    getRelatedContent(taskId: string): Observable<any> {
+        let alfrescoApi = this.apiService.getInstance();
+        return Observable.fromPromise(alfrescoApi.activiti.taskApi.getRelatedContentForTask(taskId));
+    }
+
     private callApiTasksFiltered(requestNode: TaskQueryRequestRepresentationModel) {
         return this.apiService.getInstance().activiti.taskApi.listTasks(requestNode);
     }

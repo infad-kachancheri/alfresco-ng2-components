@@ -17,6 +17,8 @@
 
 export * from './activiti-apps.component';
 export * from './activiti-tasklist.component';
+export * from './document-list.component';
+export * from './attachment-document-list.component';
 export * from './activiti-checklist.component';
 export * from './activiti-comments.component';
 export * from './activiti-people.component';

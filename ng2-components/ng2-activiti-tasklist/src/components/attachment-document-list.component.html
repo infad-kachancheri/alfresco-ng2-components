@@ -1,0 +1,7 @@
+<document-list *ngIf="!isEmpty()" [rows]="attachments">
+    <data-columns>
+        <data-column key="name" type="text" title="Name" class="ellipsis-cell" [sortable]="true"></data-column>
+        <data-column key="created" title="Date" [sortable]="true"></data-column>
+        <data-column key="createdBy" title="created By"></data-column>
+    </data-columns>
+</document-list>
