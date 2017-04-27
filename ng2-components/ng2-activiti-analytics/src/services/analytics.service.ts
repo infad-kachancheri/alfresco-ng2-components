@@ -81,6 +81,7 @@ export class AnalyticsService {
 
     /**
      * Retrive Report by name
+     * @param reportName - string - The name of report
      * @returns {Observable<any>}
      */
     getReportByName(reportName: string): Observable<any> {
@@ -88,7 +89,7 @@ export class AnalyticsService {
             .map((response: any) => {
 
                 if (reportName) {
-                    return response.find(p => p.name !== null && p.name === reportName);
+                    return response.find(p => p.name === reportName);
                 }
                 return null;
             }).catch(err => this.handleError(err));
