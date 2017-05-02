@@ -63,11 +63,7 @@ export class AnalyticsService {
     getReportByName(reportName: string): Observable<any> {
         return Observable.fromPromise(this.apiService.getInstance().activiti.reportApi.getReportList())
             .map((response: any) => {
-
-                if (reportName) {
-                    return response.find(p => p.name === reportName);
-                }
-                return null;
+                return response.find(report => report.name === reportName);
             }).catch(err => this.handleError(err));
     }
 
