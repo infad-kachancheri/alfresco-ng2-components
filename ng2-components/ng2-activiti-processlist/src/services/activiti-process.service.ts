@@ -341,7 +341,7 @@ export class ActivitiProcessService {
      */
     getRelatedContent(processId: string): Observable<any> {
         let alfrescoApi = this.apiService.getInstance();
-        return Observable.fromPromise(alfrescoApi.activiti.taskApi.getRelatedContentForTask(taskId));
+        return Observable.fromPromise(alfrescoApi.activiti.contentApi.getProcessInstanceContent(processId));
     }
 
 }
