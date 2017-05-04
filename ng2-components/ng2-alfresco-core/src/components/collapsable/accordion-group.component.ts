@@ -83,7 +83,7 @@ export class AccordionGroupComponent implements OnDestroy {
         return this.isOpen ? 'expand_less' : 'expand_more';
     }
 
-    onHeadingSelect() {
+    onHeadingClick() {
         this.headingSelect.emit(this.heading);
     }
 
