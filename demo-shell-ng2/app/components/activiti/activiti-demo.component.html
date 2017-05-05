@@ -38,6 +38,9 @@
                         </adf-accordion>
                     </div>
                     <div class="mdl-cell mdl-cell--3-col task-column mdl-shadow--2dp list-column">
+                        <attachment-document-list
+                            [taskId]="7506">
+                        </attachment-document-list>
                         <activiti-tasklist
                             [appId]="taskFilter?.appId"
                             [processDefinitionKey]="taskFilter?.filter?.processDefinitionKey"
