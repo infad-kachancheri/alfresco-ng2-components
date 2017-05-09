@@ -119,6 +119,7 @@ export class AlfrescoLoginComponent implements OnInit {
         if (!this.checkRequiredParams()) {
             return false;
         }
+        this.settingsService.bpmHost = localStorage.getItem(`bpmHost`);
         this.settingsService.setProviders(this.providers);
         this.settingsService.csrfDisabled = this.disableCsrf;
 
