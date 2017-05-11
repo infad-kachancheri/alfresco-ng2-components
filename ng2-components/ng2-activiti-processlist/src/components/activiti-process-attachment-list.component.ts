@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, Input} from '@angular/core';
-import { AlfrescoTranslationService, NotificationService } from 'ng2-alfresco-core';
+import { Component, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { AlfrescoTranslationService } from 'ng2-alfresco-core';
 import { ActivitiProcessService } from './../services/activiti-process.service';
 
 @Component({
@@ -25,59 +25,81 @@ import { ActivitiProcessService } from './../services/activiti-process.service';
     templateUrl: './activiti-process-attachment-list.component.html',
     providers: [ActivitiProcessService]
 })
-export class ActivitiProcessAttachmentListComponent implements OnInit {
+export class ActivitiProcessAttachmentListComponent implements OnChanges {
 
     @Input()
     processInstanceId: string;
 
-    entries: any[] = [];
-    nodeResults: any;
+    attachments: any[] = [];
 
     constructor(private translateService: AlfrescoTranslationService,
-                private activitiProcessService: ActivitiProcessService,
-                private notificationService: NotificationService) {
+                private processInstanceService: ActivitiProcessService) {
 
         if (translateService) {
             translateService.addTranslationFolder('ng2-activiti-processlist', 'node_modules/ng2-activiti-processlist/src');
         }
     }
 
-    ngOnInit() {
-        this.loadAttachmentsByTaskId(this.processInstanceId);
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['processInstanceId'] && changes['processInstanceId'].currentValue) {
+            this.loadAttachmentsByProcessInstanceId(this.processInstanceId);
+        }
     }
 
-    private loadAttachmentsByTaskId(processInstanceId: string) {
+    reset () {
+        this.attachments = [];
+    }
+
+    private loadAttachmentsByProcessInstanceId(processInstanceId: string) {
         if (processInstanceId) {
-            this.activitiProcessService.getRelatedContent(processInstanceId).subscribe(
+            this.reset();
+            this.processInstanceService.getRelatedContent(processInstanceId).subscribe(
                 (res: any) => {
                     res.data.forEach(content => {
-                        let entryObj = {
+                        this.attachments.push({
+                            id: content.id,
                             name: content.name,
                             created: content.created,
-                            createdBy: content.createdBy.firstName + ' ' + content.createdBy.lastName,
-                            isFile: true,
-                            content: {
-                                mimeType: content.mimeType
-                            }
-                        };
-                        this.entries.push({'entry': entryObj});
+                            createdBy: content.createdBy.firstName + ' ' + content.createdBy.lastName
+                        });
                     });
 
-                    this.nodeResults = {
-                        list: {
-                            entries: this.entries
-                        }
-                    };
                 });
         }
     }
 
+    private deleteAttachmentById(contentId: string) {
+        if (contentId) {
+            this.attachments = this.attachments.filter(content => {
+                return content.id !== contentId;
+            });
+        }
+    }
+
     isEmpty(): boolean {
-        return this.entries && this.entries.length === 0;
+        return this.attachments && this.attachments.length === 0;
     }
 
-    onPermissionsFailed(event: any) {
-        this.notificationService.openSnackMessage(`you don't have the ${event.permission} permission to ${event.action} the ${event.type} `, 4000);
+    onShowRowActionsMenu(event: any) {
+        let deleteAction = {
+            title: 'Delete',
+            name: 'delete'
+        };
+        let downloadAction = {
+            title: 'Download',
+            name: 'download'
+        };
+        event.value.actions = [
+            deleteAction,
+            downloadAction
+        ];
     }
 
+    onExecuteRowAction(event: any) {
+        let args = event.value;
+        let action = args.action;
+        if (action.name === 'delete') {
+            this.deleteAttachmentById(args.row.obj.id);
+        }
+    }
 }
