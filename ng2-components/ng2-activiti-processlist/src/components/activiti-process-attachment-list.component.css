@@ -1,0 +1,11 @@
+alfresco-datatable>>>.name-column{
+    width: 50% !important;
+}
+
+alfresco-datatable>>>.created-on-column{
+    width: 12% !important;
+}
+
+alfresco-datatable>>>.created-by-column{
+    width: 22% !important;
+}
