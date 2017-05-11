@@ -1,7 +1,41 @@
-<document-list *ngIf="!isEmpty()" [rows]="attachments">
-    <data-columns>
-        <data-column key="name" type="text" title="Name" class="ellipsis-cell" [sortable]="true"></data-column>
-        <data-column key="created" title="Date" [sortable]="true"></data-column>
-        <data-column key="createdBy" title="created By"></data-column>
-    </data-columns>
-</document-list>
+<alfresco-document-list [contentActions] = "true" [enablePagination] = "false"
+    [node]="nodeResults">
+    <content-columns>
+        <content-column key="$thumbnail" type="image"></content-column>
+        <content-column
+            title="Name"
+            key="name"
+            sortable="true"
+            class="full-width ellipsis-cell">
+        </content-column>
+        <content-column
+            title="Created By"
+            key="createdBy"
+            sortable="true"
+            class="desktop-only">
+        </content-column>
+        <content-column
+            title="Created On"
+            key="created"
+            type="date"
+            format="medium"
+            sortable="true"
+            class="desktop-only">
+        </content-column>
+    </content-columns>
+    <content-actions>
+        <content-action
+                target="document"
+                title="{{'DOCUMENT_LIST.ACTIONS.DOCUMENT.DOWNLOAD' | translate}}"
+                handler="download">
+        </content-action>
+        <content-action
+                target="document"
+                permission="delete"
+                [disableWithNoPermission]="true"
+                (permissionEvent)="onPermissionsFailed($event)"
+                title="{{'DOCUMENT_LIST.ACTIONS.DOCUMENT.DELETE' | translate}}"
+                handler="delete">
+        </content-action>                
+    </content-actions>
+</alfresco-document-list>

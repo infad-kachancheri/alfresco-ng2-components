@@ -16,7 +16,7 @@
  */
 
 import { Component, OnInit, Input} from '@angular/core';
-import { AlfrescoTranslationService } from 'ng2-alfresco-core';
+import { AlfrescoTranslationService, NotificationService } from 'ng2-alfresco-core';
 import { ActivitiProcessService } from './../services/activiti-process.service';
 
 @Component({
@@ -30,10 +30,12 @@ export class ActivitiProcessAttachmentListComponent implements OnInit {
     @Input()
     processInstanceId: string;
 
-    attachments: any[] = [];
+    entries: any[] = [];
+    nodeResults: any;
 
     constructor(private translateService: AlfrescoTranslationService,
-                private activitiProcessService: ActivitiProcessService) {
+                private activitiProcessService: ActivitiProcessService,
+                private notificationService: NotificationService) {
 
         if (translateService) {
             translateService.addTranslationFolder('ng2-activiti-processlist', 'node_modules/ng2-activiti-processlist/src');
@@ -49,19 +51,33 @@ export class ActivitiProcessAttachmentListComponent implements OnInit {
             this.activitiProcessService.getRelatedContent(processInstanceId).subscribe(
                 (res: any) => {
                     res.data.forEach(content => {
-                        this.attachments.push({
+                        let entryObj = {
                             name: content.name,
                             created: content.created,
-                            createdBy: content.createdBy.firstName + ' ' + content.createdBy.lastName
-                        });
+                            createdBy: content.createdBy.firstName + ' ' + content.createdBy.lastName,
+                            isFile: true,
+                            content: {
+                                mimeType: content.mimeType
+                            }
+                        };
+                        this.entries.push({'entry': entryObj});
                     });
 
+                    this.nodeResults = {
+                        list: {
+                            entries: this.entries
+                        }
+                    };
                 });
         }
     }
 
     isEmpty(): boolean {
-        return this.attachments && this.attachments.length === 0;
+        return this.entries && this.entries.length === 0;
+    }
+
+    onPermissionsFailed(event: any) {
+        this.notificationService.openSnackMessage(`you don't have the ${event.permission} permission to ${event.action} the ${event.type} `, 4000);
     }
 
 }
