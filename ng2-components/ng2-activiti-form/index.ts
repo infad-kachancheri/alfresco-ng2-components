@@ -42,7 +42,6 @@ export * from './src/services/ecm-model.service';
 export * from './src/services/node.service';
 export * from './src/services/form-rendering.service';
 export * from './src/events/index';
-export * from './src/services/activiti-content-service';
 
 export const ACTIVITI_FORM_DIRECTIVES: any[] = [
     ActivitiForm,
@@ -59,8 +58,7 @@ export const ACTIVITI_FORM_PROVIDERS: any[] = [
     NodeService,
     WidgetVisibilityService,
     ActivitiAlfrescoContentService,
-    FormRenderingService,
-    ActivitiContentService
+    FormRenderingService
 ];
 
 @NgModule({
