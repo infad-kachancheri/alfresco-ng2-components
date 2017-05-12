@@ -16,7 +16,7 @@
  */
 
 import { Component, OnChanges, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { AlfrescoTranslationService } from 'ng2-alfresco-core';
+import { AlfrescoTranslationService, ContentService } from 'ng2-alfresco-core';
 import { ActivitiContentService } from 'ng2-activiti-form';
 
 @Component({
@@ -35,7 +35,8 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
     attachments: any[] = [];
 
     constructor(private translateService: AlfrescoTranslationService,
-                private activitiContentService: ActivitiContentService) {
+                private activitiContentService: ActivitiContentService,
+                private contentService: ContentService) {
 
         if (translateService) {
             translateService.addTranslationFolder('ng2-activiti-processlist', 'node_modules/ng2-activiti-processlist/src');
@@ -94,8 +95,14 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
             name: 'delete'
         };
 
+        let downloadAction = {
+            title: 'Download',
+            name: 'download'
+        };
+
         event.value.actions = [
-            deleteAction
+            deleteAction,
+            downloadAction
         ];
     }
 
@@ -104,6 +111,8 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
         let action = args.action;
         if (action.name === 'delete') {
             this.deleteAttachmentById(args.row.obj.id);
+        } else if (action.name === 'download') {
+            this.downloadContent(args.row.obj);
         }
     }
 
@@ -113,6 +122,18 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
             (blob: Blob) => {
                 content.contentBlob = blob;
                 this.attachmentClick.emit(content);
+            }
+        );
+    }
+
+    /**
+     * Invoke content download.
+     */
+    downloadContent(content: any): void {
+        this.activitiContentService.getFileRawContent(content.id).subscribe(
+            (blob: Blob) => this.contentService.downloadBlob(blob, content.name),
+            (error) => {
+
             }
         );
     }
