@@ -1,11 +1,15 @@
-alfresco-datatable>>>.name-column{
-    width: 50% !important;
+alfresco-datatable >>> .column-header {
+    color: #232323;
+    font-size: 15px;
 }
 
-alfresco-datatable>>>.created-on-column{
-    width: 12% !important;
+alfresco-datatable >>> .data-cell {
+    cursor: pointer !important;
 }
 
-alfresco-datatable>>>.created-by-column{
-    width: 22% !important;
+alfresco-datatable >>> .cell-value{
+    width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis
 }

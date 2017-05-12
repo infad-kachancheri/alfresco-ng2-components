@@ -351,14 +351,4 @@ export class ActivitiProcessService {
     private handleError(error: any) {
         return Observable.throw(error || 'Server error');
     }
-
-    /**
-     * Retrieve all deployed apps
-     * @returns {Observable<any>}
-     */
-    getRelatedContent(processInstanceId: string): Observable<any> {
-        let alfrescoApi = this.apiService.getInstance();
-        // return Observable.fromPromise(alfrescoApi.activiti.taskApi.getRelatedContentForTask(taskId));
-        return Observable.fromPromise(alfrescoApi.activiti.contentApi.getRelatedContentForProcessInstance(processInstanceId));
-    }
 }

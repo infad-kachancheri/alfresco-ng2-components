@@ -15,25 +15,27 @@
  * limitations under the License.
  */
 
-import { Component, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { AlfrescoTranslationService } from 'ng2-alfresco-core';
-import { ActivitiProcessService } from './../services/activiti-process.service';
+import { ActivitiContentService } from 'ng2-activiti-form';
 
 @Component({
     selector: 'activiti-process-attachment-list',
     styleUrls: ['./activiti-process-attachment-list.component.css'],
-    templateUrl: './activiti-process-attachment-list.component.html',
-    providers: [ActivitiProcessService]
+    templateUrl: './activiti-process-attachment-list.component.html'
 })
 export class ActivitiProcessAttachmentListComponent implements OnChanges {
 
     @Input()
     processInstanceId: string;
 
+    @Output()
+    attachmentClick = new EventEmitter();
+
     attachments: any[] = [];
 
     constructor(private translateService: AlfrescoTranslationService,
-                private processInstanceService: ActivitiProcessService) {
+                private activitiContentService: ActivitiContentService) {
 
         if (translateService) {
             translateService.addTranslationFolder('ng2-activiti-processlist', 'node_modules/ng2-activiti-processlist/src');
@@ -53,7 +55,7 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
     private loadAttachmentsByProcessInstanceId(processInstanceId: string) {
         if (processInstanceId) {
             this.reset();
-            this.processInstanceService.getRelatedContent(processInstanceId).subscribe(
+            this.activitiContentService.getProcessRelatedContent(processInstanceId).subscribe(
                 (res: any) => {
                     res.data.forEach(content => {
                         this.attachments.push({
@@ -70,9 +72,15 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
 
     private deleteAttachmentById(contentId: string) {
         if (contentId) {
-            this.attachments = this.attachments.filter(content => {
-                return content.id !== contentId;
-            });
+            this.activitiContentService.deleteRelatedContent(contentId).subscribe(
+                (res: any) => {
+                    this.attachments = this.attachments.filter(content => {
+                        return content.id !== contentId;
+                    });
+                },
+                (err) => {
+                    console.log(err);
+                });
         }
     }
 
@@ -85,13 +93,9 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
             title: 'Delete',
             name: 'delete'
         };
-        let downloadAction = {
-            title: 'Download',
-            name: 'download'
-        };
+
         event.value.actions = [
-            deleteAction,
-            downloadAction
+            deleteAction
         ];
     }
 
@@ -101,5 +105,15 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
         if (action.name === 'delete') {
             this.deleteAttachmentById(args.row.obj.id);
         }
+    }
+
+    openContent(event: any): void {
+        let content = event.value.obj;
+        this.activitiContentService.getFileRawContent(content.id).subscribe(
+            (blob: Blob) => {
+                content.contentBlob = blob;
+                this.attachmentClick.emit(content);
+            }
+        );
     }
 }
