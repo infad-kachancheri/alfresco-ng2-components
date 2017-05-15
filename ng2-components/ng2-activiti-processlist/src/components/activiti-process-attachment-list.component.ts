@@ -32,6 +32,9 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
     @Output()
     attachmentClick = new EventEmitter();
 
+    @Output()
+    error: EventEmitter<any> = new EventEmitter<any>();
+
     attachments: any[] = [];
 
     constructor(private translateService: AlfrescoTranslationService,
@@ -45,6 +48,7 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['processInstanceId'] && changes['processInstanceId'].currentValue) {
+            this.processInstanceId = changes['processInstanceId'].currentValue;
             this.loadAttachmentsByProcessInstanceId(this.processInstanceId);
         }
     }
@@ -67,6 +71,9 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
                         });
                     });
 
+                },
+                (err) => {
+                    this.error.emit(err);
                 });
         }
     }
@@ -80,7 +87,7 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
                     });
                 },
                 (err) => {
-                    console.log(err);
+                    this.error.emit(err);
                 });
         }
     }
@@ -121,7 +128,11 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
         this.activitiContentService.getFileRawContent(content.id).subscribe(
             (blob: Blob) => {
                 content.contentBlob = blob;
+                content.contentBlobURL = URL.createObjectURL(blob);
                 this.attachmentClick.emit(content);
+            },
+            (err) => {
+                this.error.emit(err);
             }
         );
     }
@@ -132,8 +143,8 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
     downloadContent(content: any): void {
         this.activitiContentService.getFileRawContent(content.id).subscribe(
             (blob: Blob) => this.contentService.downloadBlob(blob, content.name),
-            (error) => {
-
+            (err) => {
+                this.error.emit(err);
             }
         );
     }
