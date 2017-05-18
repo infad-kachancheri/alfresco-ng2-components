@@ -20,6 +20,7 @@ import { CoreModule } from 'ng2-alfresco-core';
 import { DataTableModule } from 'ng2-alfresco-datatable';
 import { ActivitiFormModule } from 'ng2-activiti-form';
 import { ActivitiTaskListModule } from 'ng2-activiti-tasklist';
+import { UploadModule } from 'ng2-alfresco-upload';
 
 import {
     ActivitiProcessInstanceListComponent,
@@ -30,7 +31,8 @@ import {
     ActivitiProcessComments,
     ActivitiProcessInstanceDetails,
     ActivitiStartProcessInstance,
-    ActivitiProcessAttachmentListComponent
+    ActivitiProcessAttachmentListComponent,
+    ActivitiCreateProcessAttachmentComponent
 } from './src/components/index';
 
 import { ActivitiProcessService } from './src/services/activiti-process.service';
@@ -42,6 +44,7 @@ export * from './src/components/activiti-filters.component';
 export * from './src/components/activiti-process-instance-details.component';
 export * from './src/components/activiti-start-process.component';
 export * from './src/components/activiti-process-attachment-list.component';
+export * from './src/components/activiti-create-process-attachment.component';
 
 // models
 export * from './src/models/index';
@@ -58,7 +61,8 @@ export const ACTIVITI_PROCESSLIST_DIRECTIVES: [any] = [
     ActivitiProcessInstanceVariables,
     ActivitiProcessComments,
     ActivitiStartProcessInstance,
-    ActivitiProcessAttachmentListComponent
+    ActivitiProcessAttachmentListComponent,
+    ActivitiCreateProcessAttachmentComponent
 ];
 
 export const ACTIVITI_PROCESSLIST_PROVIDERS: [any] = [
@@ -71,7 +75,8 @@ export const ACTIVITI_PROCESSLIST_PROVIDERS: [any] = [
         DataTableModule,
         ActivitiFormModule,
         ActivitiTaskListModule,
-        DocumentListModule
+        DocumentListModule,
+        UploadModule
     ],
     declarations: [
         ...ACTIVITI_PROCESSLIST_DIRECTIVES
