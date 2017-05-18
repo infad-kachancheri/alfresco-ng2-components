@@ -1,3 +1,12 @@
+<div class="action-header">
+    <button class="mdl-button mdl-js-button" (click)="attachDocumentToProcess()">
+        Attach Document
+        <i class="material-icons">add</i>
+    </button>
+</div>
+<div class="no-attachment-message" *ngIf="isEmpty()">
+    No Attachments Found
+</div>
 <alfresco-datatable *ngIf="!isEmpty()"
     [rows]="attachments"
     [actions]="true"
@@ -5,7 +14,7 @@
     (showRowActionsMenu)="onShowRowActionsMenu($event)"
     (executeRowAction)="onExecuteRowAction($event)">
     <data-columns>
-        <data-column key="name" type="text" title="Name" class="name-column" [sortable]="true"></data-column>
-        <data-column key="created" type="date" format="shortDate" title="Date"></data-column>
+        <data-column key="name" type="text" title="Name" class="name-column"></data-column>
+        <data-column key="created" type="date" format="shortDate" title="Date" [sortable]="true"></data-column>
     </data-columns>
 </alfresco-datatable>

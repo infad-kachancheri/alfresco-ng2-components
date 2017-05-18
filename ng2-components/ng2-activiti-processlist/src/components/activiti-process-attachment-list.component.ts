@@ -33,6 +33,9 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
     attachmentClick = new EventEmitter();
 
     @Output()
+    attachmentCreate = new EventEmitter();
+
+    @Output()
     error: EventEmitter<any> = new EventEmitter<any>();
 
     attachments: any[] = [];
@@ -97,9 +100,14 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
     }
 
     onShowRowActionsMenu(event: any) {
-        let deleteAction = {
-            title: 'Delete',
-            name: 'delete'
+        let viewAction = {
+            title: 'View',
+            name: 'view'
+        };
+
+        let removeAction = {
+            title: 'Remove',
+            name: 'remove'
         };
 
         let downloadAction = {
@@ -108,7 +116,8 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
         };
 
         event.value.actions = [
-            deleteAction,
+            viewAction,
+            removeAction,
             downloadAction
         ];
     }
@@ -116,7 +125,9 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
     onExecuteRowAction(event: any) {
         let args = event.value;
         let action = args.action;
-        if (action.name === 'delete') {
+        if (action.name === 'view') {
+            this.emitDocumentContent(args.row.obj);
+        } else if (action.name === 'remove') {
             this.deleteAttachmentById(args.row.obj.id);
         } else if (action.name === 'download') {
             this.downloadContent(args.row.obj);
@@ -125,10 +136,13 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
 
     openContent(event: any): void {
         let content = event.value.obj;
+        this.emitDocumentContent(content);
+    }
+
+    emitDocumentContent(content: any) {
         this.activitiContentService.getFileRawContent(content.id).subscribe(
             (blob: Blob) => {
                 content.contentBlob = blob;
-                content.contentBlobURL = URL.createObjectURL(blob);
                 this.attachmentClick.emit(content);
             },
             (err) => {
@@ -147,5 +161,9 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
                 this.error.emit(err);
             }
         );
+    }
+
+    attachDocumentToProcess() {
+        this.attachmentCreate.emit();
     }
 }
