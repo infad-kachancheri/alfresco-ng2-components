@@ -54,6 +54,9 @@ export class UploadDragAreaComponent {
     @Input()
     rootFolderId: string = UploadDragAreaComponent.DEFAULT_ROOT_ID;
 
+    @Input()
+    uploadToECM: boolean = true;
+
     @Output()
     onSuccess = new EventEmitter();
 
@@ -97,6 +100,10 @@ export class UploadDragAreaComponent {
      */
     onFilesDropped(files: File[], rootId?: string, directory?: string): void {
         if (files.length) {
+            if (!this.uploadToECM) {
+                this.onSuccess.emit(files);
+                return;
+            }
             this.uploadService.addToQueue(files);
             this.uploadService.uploadFilesInTheQueue(rootId || this.rootFolderId, directory || this.currentFolderPath, this.onSuccess);
             let latestFilesAdded = this.uploadService.getQueue();
@@ -112,6 +119,10 @@ export class UploadDragAreaComponent {
      */
     onFilesEntityDropped(item: any): void {
         item.file((file: any) => {
+            if (!this.uploadToECM) {
+                this.onSuccess.emit(file);
+                return;
+            }
             this.uploadService.addToQueue([file]);
             let path = item.fullPath.replace(item.name, '');
             let filePath = this.currentFolderPath + path;
