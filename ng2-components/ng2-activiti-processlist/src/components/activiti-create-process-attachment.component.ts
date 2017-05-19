@@ -46,7 +46,7 @@ export class ActivitiCreateProcessAttachmentComponent implements OnChanges {
         }
     }
 
-    onFileUpload(files: FileList) {
+    onFileUpload(files: any) {
 
         if (files.length > 0) {
             for (let i = 0; i < files.length; i++) {
