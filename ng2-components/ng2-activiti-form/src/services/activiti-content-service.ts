@@ -24,7 +24,6 @@ export class ActivitiContentService {
 
     static UNKNOWN_ERROR_MESSAGE: string = 'Unknown error';
     static GENERIC_ERROR_MESSAGE: string = 'Server error';
-<<<<<<< 508fb83416bca3ddef00333e10a0f0c7cd04f420
     static DEFAULT_MIME_TYPE_ICON: string = 'ft_ic_miscellaneous.svg';
 
     mimeTypeIcons: any = {
@@ -55,8 +54,6 @@ export class ActivitiContentService {
         'application/vnd.apple.pages': 'ft_ic_document.svg',
         'application/vnd.apple.numbers': 'ft_ic_spreadsheet.svg'
     };
-=======
->>>>>>> Added content service in activiti form component
 
     constructor(private apiService: AlfrescoApiService,
                 private logService: LogService) {
@@ -131,12 +128,9 @@ export class ActivitiContentService {
         this.logService.error(errMsg);
         return Observable.throw(errMsg);
     }
-<<<<<<< 508fb83416bca3ddef00333e10a0f0c7cd04f420
 
     getMimeTypeIcon(mimeType: string): string {
         let icon = this.mimeTypeIcons[mimeType];
         return icon || ActivitiContentService.DEFAULT_MIME_TYPE_ICON;
     }
-=======
->>>>>>> Added content service in activiti form component
 }
