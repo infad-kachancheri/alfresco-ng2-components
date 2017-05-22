@@ -22,6 +22,7 @@ import { ActivitiFormModule } from 'ng2-activiti-form';
 import { ActivitiPeopleService } from './src/services/activiti-people.service';
 import { ActivitiTaskListService } from './src/services/activiti-tasklist.service';
 import { MaterialModule } from '@angular/material';
+import { UploadModule } from 'ng2-alfresco-upload';
 
 import {
     ActivitiApps,
@@ -35,7 +36,8 @@ import {
     ActivitiTaskHeader,
     ActivitiStartTaskButton,
     ActivitiPeopleSearch,
-    TaskAttachmentListComponent
+    TaskAttachmentListComponent,
+    ActivitiCreateTaskAttachmentComponent
 } from './src/components/index';
 
 export * from './src/components/index';
@@ -54,7 +56,8 @@ export const ACTIVITI_TASKLIST_DIRECTIVES: any[] = [
     ActivitiTaskHeader,
     ActivitiStartTaskButton,
     ActivitiPeopleSearch,
-    TaskAttachmentListComponent
+    TaskAttachmentListComponent,
+    ActivitiCreateTaskAttachmentComponent
 ];
 
 export const ACTIVITI_TASKLIST_PROVIDERS: any[] = [
@@ -67,7 +70,8 @@ export const ACTIVITI_TASKLIST_PROVIDERS: any[] = [
         CoreModule,
         DataTableModule,
         ActivitiFormModule,
-        MaterialModule
+        MaterialModule,
+        UploadModule
     ],
     declarations: [
         ...ACTIVITI_TASKLIST_DIRECTIVES
