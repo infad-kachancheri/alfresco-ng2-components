@@ -123,4 +123,14 @@ export class ActivitiContentService {
         let icon = this.mimeTypeIcons[mimeType];
         return icon || ActivitiContentService.DEFAULT_MIME_TYPE_ICON;
     }
+
+    createProcessRelatedContent(processInstanceId: string, file: any) {
+        return Observable.fromPromise(this.apiService.getInstance().activiti.contentApi.createRelatedContentOnProcessInstance(processInstanceId, file))
+            .catch(err => this.handleError(err));
+    }
+
+    createTaskRelatedContent(taskId: string, file: any) {
+        return Observable.fromPromise(this.apiService.getInstance().activiti.contentApi.createRelatedContentOnTask(taskId, file))
+            .catch(err => this.handleError(err));
+    }
 }
