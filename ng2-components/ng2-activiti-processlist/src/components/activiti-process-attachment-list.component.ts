@@ -70,7 +70,8 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
                             id: content.id,
                             name: content.name,
                             created: content.created,
-                            createdBy: content.createdBy.firstName + ' ' + content.createdBy.lastName
+                            createdBy: content.createdBy.firstName + ' ' + content.createdBy.lastName,
+                            icon: this.activitiContentService.getMimeTypeIcon(content.mimeType)
                         });
                     });
 
