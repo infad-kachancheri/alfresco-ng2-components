@@ -16,7 +16,8 @@
  */
 
 import { NgModule, ModuleWithProviders } from '@angular/core';
-import { MdIconModule, MdButtonModule } from '@angular/material';
+import { DatePipe } from '@angular/common';
+import { MdIconModule, MdButtonModule, MdInputModule } from '@angular/material';
 import { CoreModule } from 'ng2-alfresco-core';
 import { DataTableModule } from 'ng2-alfresco-datatable';
 import { ActivitiFormModule } from 'ng2-activiti-form';
@@ -73,13 +74,15 @@ export const ACTIVITI_TASKLIST_PROVIDERS: any[] = [
         DataTableModule,
         ActivitiFormModule,
         MdIconModule,
-        MdButtonModule
+        MdButtonModule,
+        MdInputModule
     ],
     declarations: [
         ...ACTIVITI_TASKLIST_DIRECTIVES
     ],
     providers: [
-        ...ACTIVITI_TASKLIST_PROVIDERS
+        ...ACTIVITI_TASKLIST_PROVIDERS,
+        DatePipe
     ],
     exports: [
         ...ACTIVITI_TASKLIST_DIRECTIVES,

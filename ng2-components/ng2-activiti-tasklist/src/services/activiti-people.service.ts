@@ -47,6 +47,11 @@ export class ActivitiPeopleService {
             .catch(err => this.handleError(err));
     }
 
+     getUserProfilePicture(userId: number): Observable<string> {
+        return Observable.fromPromise(this.getUserProfilePictureApi(userId))
+            .catch(err => this.handleError(err));
+    }
+
     private getWorkflowUserApi(options: any) {
         return this.alfrescoJsApi.getInstance().activiti.usersWorkflowApi.getUsers(options);
     }
@@ -57,6 +62,10 @@ export class ActivitiPeopleService {
 
     private removeInvolvedUserFromTaskApi(taskId: string, node: any) {
         return this.alfrescoJsApi.getInstance().activiti.taskActionsApi.removeInvolvedUser(taskId, node);
+    }
+
+    private getUserProfilePictureApi(userId: number) {
+        return this.alfrescoJsApi.getInstance().activiti.userApi.getProfilePicture(userId);
     }
 
     /**

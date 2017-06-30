@@ -1,32 +1,52 @@
-<span class="activiti-label mdl-badge"
-      [attr.data-badge]="comments?.length">{{ 'TASK_DETAILS.LABELS.COMMENTS' |translate }}</span>
-<div *ngIf="!readOnly" id="addComment" (click)="showDialog()" class="icon material-icons">add</div>
-<div *ngIf="!readOnly" class="mdl-tooltip" for="addComment">
-    {{ 'TASK_DETAILS.COMMENTS.ADD' | translate }}
-</div>
-
-<div class="menu-container" *ngIf="comments?.length > 0">
-    <ul class='mdl-list'>
-        <li class="mdl-list__item list-wrap" *ngFor="let comment of comments">
-            <span class="mdl-list__item-primary-content hide-long-names"><i class="material-icons mdl-list__item-icon">comment</i>{{comment.message}}</span>
-        </li>
-    </ul>
-</div>
-<div *ngIf="comments?.length === 0" data-automation-id="comments-none">
-    {{ 'TASK_DETAILS.COMMENTS.NONE' | translate }}
-</div>
-
-
-<dialog class="mdl-dialog" #dialog>
-    <h4 class="mdl-dialog__title">{{ 'TASK_DETAILS.COMMENTS.DIALOG.TITLE' | translate }}</h4>
-    <div class="mdl-dialog__content">
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <textarea class="mdl-textfield__input" type="text" [(ngModel)]="message" rows="1" id="commentText"></textarea>
-            <label class="mdl-textfield__label" for="commentText">{{ 'TASK_DETAILS.COMMENTS.DIALOG.LABELS.MESSAGE' | translate }}</label>
+<div class="main-container">
+    <div class="comments-header">
+        Comments({{comments?.length}})
+    </div>
+    <div class="comments-container" *ngIf="!isReadOnly()">
+        <div class="text-area-container">
+            <md-input-container class="full-width">
+                <input mdInput placeholder="Add a comment" [(ngModel)]="message" (keyup.enter)="add()" (keyup.esc)="clear()">
+            </md-input-container>
         </div>
     </div>
-    <div class="mdl-dialog__actions">
-        <button type="button" (click)="add()" class="mdl-button">{{ 'TASK_DETAILS.COMMENTS.DIALOG.BUTTON.ADD' | translate }}</button>
-        <button type="button" (click)="cancel()" class="mdl-button close">{{ 'TASK_DETAILS.COMMENTS.DIALOG.BUTTON.CANCEL' | translate }}</button>
+    <div class="comments-container" *ngFor="let comment of comments">
+        <div class="img-container">
+            <div class="user-image">
+                <div *ngIf="findProfilePicture(comment.createdBy); then profile else name"></div>
+                <ng-template #profile>
+                    <img class="user-image" [src]="'data:image/png;base64,' + findProfilePicture(comment.createdBy)">
+                </ng-template>
+                <ng-template #name>{{getUserShortName(comment)}}</ng-template>
+            </div>
+            
+        </div>
+        <div class="comment-contents">
+            <div class="user-name">
+                {{comment?.createdBy?.firstName}} {{comment?.createdBy?.lastName}}
+            </div>
+            <div class="message">
+                {{comment?.message}}
+            </div>
+            <div class="message-time">
+                {{transformDate(comment?.created)}}
+            </div>
+        </div>
     </div>
-</dialog>
+<!--    
+        <div *ngFor="let comment of comments">
+            <md-card class="example-card">
+                <md-card-header>
+                    <div md-card-avatar>{{getUserShortName(comment)}}</div>
+                    <md-card-title>{{comment?.createdBy?.firstName}} {{comment?.createdBy?.lastName}}</md-card-title>
+                    <md-card-subtitle>Dog Breed</md-card-subtitle>
+                </md-card-header>
+                <md-card-content>
+                    <p>{{comment?.message}}</p>
+                </md-card-content>
+                <md-card-actions>
+                    <button md-button>LIKE</button>
+                    <button md-button>SHARE</button>
+                </md-card-actions>
+            </md-card>
+        </div>-->
+</div>
