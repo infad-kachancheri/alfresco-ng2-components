@@ -17,6 +17,8 @@
 
 import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { MdProgressSpinnerModule } from '@angular/material';
+
 import { CoreModule, AlfrescoTranslationService } from 'ng2-alfresco-core';
 import { DataTableModule } from 'ng2-alfresco-datatable';
 import { ActivitiTaskList } from './activiti-tasklist.component';
@@ -87,7 +89,8 @@ describe('ActivitiTaskList', () => {
         TestBed.configureTestingModule({
             imports: [
                 CoreModule.forRoot(),
-                DataTableModule
+                DataTableModule,
+                MdProgressSpinnerModule
             ],
             declarations: [
                 ActivitiTaskList
