@@ -19,6 +19,7 @@ import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Rx';
+import { MdProgressSpinnerModule } from '@angular/material';
 
 import { AlfrescoTranslationService, CoreModule } from 'ng2-alfresco-core';
 import { ActivitiContentService } from 'ng2-activiti-form';
@@ -42,7 +43,8 @@ describe('Activiti Process Instance Attachment List', () => {
         TestBed.configureTestingModule({
             imports: [
                 CoreModule.forRoot(),
-                DataTableModule.forRoot()
+                DataTableModule.forRoot(),
+                MdProgressSpinnerModule
             ],
             declarations: [
                 ActivitiProcessAttachmentListComponent
