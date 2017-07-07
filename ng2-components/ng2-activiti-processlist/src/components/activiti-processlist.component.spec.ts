@@ -19,6 +19,7 @@ import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed, async, fakeAsync, tick } from '@angular/core/testing';
 import { Observable } from 'rxjs/Rx';
 import { ActivitiProcessInstanceListComponent } from './activiti-processlist.component';
+import { MdProgressSpinnerModule } from '@angular/material';
 
 import { AlfrescoTranslationService, CoreModule } from 'ng2-alfresco-core';
 import { DataTableModule, ObjectDataRow, DataRowEvent, ObjectDataTableAdapter, DataSorting } from 'ng2-alfresco-datatable';
@@ -39,7 +40,8 @@ describe('ActivitiProcessInstanceListComponent', () => {
         TestBed.configureTestingModule({
             imports: [
                 CoreModule.forRoot(),
-                DataTableModule.forRoot()
+                DataTableModule.forRoot(),
+                MdProgressSpinnerModule
             ],
             declarations: [ ActivitiProcessInstanceListComponent ],
             providers: [
