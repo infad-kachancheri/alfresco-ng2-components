@@ -108,7 +108,12 @@ export class StartTaskComponent implements OnInit {
     }
 
     private resetForm() {
-        this.startTaskmodel = null;
+        this.startTaskmodel.assignee = null;
+        this.startTaskmodel.category = '';
+        this.startTaskmodel.description = '';
+        this.startTaskmodel.dueDate = '';
+        this.startTaskmodel.formKey = null;
+        this.startTaskmodel.name = '';
     }
 
     private getUsers() {
