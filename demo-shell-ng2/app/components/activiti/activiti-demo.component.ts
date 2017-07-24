@@ -352,4 +352,8 @@ export class ActivitiDemoComponent implements AfterViewInit, OnDestroy, OnInit {
     isTaskCompleted(): boolean {
         return this.activitidetails.isCompletedTask();
     }
+
+    onError(error: any) {
+
+    }
 }

@@ -234,6 +234,9 @@ export class TaskDetailsComponent implements OnInit, OnChanges {
                             this.taskPeople.push(new User(user));
                         });
                     }
+                },
+                (error) => {
+                    this.onError.emit(error);
                 });
         }
     }
