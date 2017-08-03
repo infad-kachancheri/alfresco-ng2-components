@@ -16,7 +16,10 @@
  */
 
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { AlfrescoTranslationService, CardViewDateItemModel, CardViewItem, CardViewMapItemModel, CardViewTextItemModel, LogService } from 'ng2-alfresco-core';
+import {
+    AlfrescoTranslationService, CardViewDateItemModel,
+    CardViewItem, CardViewMapItemModel, CardViewTextItemModel,
+    CardViewUserlistItemModel, LogService } from 'ng2-alfresco-core';
 import { TaskDetailsModel } from '../models/task-details.model';
 import { TaskListService } from './../services/tasklist.service';
 
@@ -56,7 +59,31 @@ export class TaskHeaderComponent implements OnChanges {
         if (this.taskDetails) {
             let valueMap = new Map([[this.taskDetails.processInstanceId, this.taskDetails.processDefinitionName]]);
             this.properties = [
-                new CardViewTextItemModel({ label: 'Assignee', value: this.taskDetails.getFullName(), key: 'assignee', default: 'No assignee' } ),
+                new CardViewUserlistItemModel({
+                    label: 'Assignee',
+                    value: this.taskDetails.assignee,
+                    options: [{
+                        id: 1001,
+                        email: 'infad.k@muraai.com',
+                        firstName: 'Infad',
+                        lastName: 'Kachancheri'
+                    },
+                    {
+                        id: 1002,
+                        email: 'infad.k@muraai.com',
+                        firstName: 'Deepak',
+                        lastName: 'Paul'
+                    },
+                    {
+                        id: 1003,
+                        email: 'infad.k@muraai.com',
+                        firstName: 'Siva',
+                        lastName: 'Kumar'
+                    }],
+                    key: 'assignee',
+                    default: 'No assignee',
+                    editable: true
+                } ),
                 new CardViewTextItemModel({ label: 'Status', value: this.getTaskStatus(), key: 'status' }),
                 new CardViewDateItemModel({ label: 'Due Date', value: this.taskDetails.dueDate, key: 'dueDate', default: 'No date', editable: true }),
                 new CardViewTextItemModel({ label: 'Category', value: this.taskDetails.category, key: 'category', default: 'No category' }),
