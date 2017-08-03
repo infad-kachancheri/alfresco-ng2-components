@@ -18,17 +18,19 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MdButtonModule, MdDatepickerModule, MdIconModule, MdInputModule, MdNativeDateModule } from '@angular/material';
+import { MdAutocompleteModule, MdButtonModule, MdDatepickerModule, MdIconModule, MdInputModule, MdNativeDateModule } from '@angular/material';
 import { CardViewContentProxyDirective } from './card-view-content-proxy.directive';
 import { CardViewDateItemComponent } from './card-view-dateitem.component';
 import { CardViewItemDispatcherComponent } from './card-view-item-dispatcher.component';
 import { CardViewMapItemComponent } from './card-view-mapitem.component';
 import { CardViewTextItemComponent } from './card-view-textitem.component';
+import { CardViewUserlistItemComponent } from './card-view-userlistitem.component';
 import { CardViewComponent } from './card-view.component';
 
 @NgModule({
     imports: [
         CommonModule,
+        MdAutocompleteModule,
         MdDatepickerModule,
         MdNativeDateModule,
         MdInputModule,
@@ -42,12 +44,14 @@ import { CardViewComponent } from './card-view.component';
         CardViewContentProxyDirective,
         CardViewTextItemComponent,
         CardViewMapItemComponent,
-        CardViewDateItemComponent
+        CardViewDateItemComponent,
+        CardViewUserlistItemComponent
     ],
     entryComponents: [
         CardViewTextItemComponent,
         CardViewMapItemComponent,
-        CardViewDateItemComponent
+        CardViewDateItemComponent,
+        CardViewUserlistItemComponent
     ],
     exports: [
         CardViewComponent
