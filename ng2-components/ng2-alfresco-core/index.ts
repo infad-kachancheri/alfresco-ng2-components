@@ -122,6 +122,7 @@ export * from './src/events/folder-created.event';
 export * from './src/events/file.event';
 
 export * from './src/models/card-view-textitem.model';
+export * from './src/models/card-view-userlistitem.model';
 export * from './src/models/card-view-mapitem.model';
 export * from './src/models/card-view-dateitem.model';
 export * from './src/models/file.model';
