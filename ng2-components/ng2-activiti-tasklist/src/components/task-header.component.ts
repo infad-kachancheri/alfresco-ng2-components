@@ -15,17 +15,23 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { AlfrescoTranslationService, CardViewDateItemModel, CardViewItem, CardViewMapItemModel, CardViewTextItemModel, LogService } from 'ng2-alfresco-core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+    AlfrescoTranslationService, CardViewDateItemModel, CardViewItem,
+    CardViewMapItemModel, CardViewTextItemModel, CardViewUpdateService,
+    ClickNotification, LogService } from 'ng2-alfresco-core';
+import { Observable, Observer } from 'rxjs/Rx';
 import { TaskDetailsModel } from '../models/task-details.model';
+import { User } from '../models/user.model';
+import { PeopleService } from '../services/people.service';
 import { TaskListService } from './../services/tasklist.service';
 
 @Component({
     selector: 'adf-task-header, activiti-task-header',
     templateUrl: './task-header.component.html',
-    styleUrls: ['./task-header.component.scss']
+    styleUrls: ['./task-header.component.scss', './task-header.component.css']
 })
-export class TaskHeaderComponent implements OnChanges {
+export class TaskHeaderComponent implements OnChanges, OnInit {
 
     @Input()
     formName: string = null;
@@ -36,19 +42,34 @@ export class TaskHeaderComponent implements OnChanges {
     @Output()
     claim: EventEmitter<any> = new EventEmitter<any>();
 
+    @Output()
+    assign: EventEmitter<void> = new EventEmitter<void>();
+
     properties: CardViewItem [];
     inEdit: boolean = false;
+    showAssignee: boolean = false;
+
+    private peopleSearchObserver: Observer<User[]>;
+    peopleSearch$: Observable<User[]>;
 
     constructor(private translateService: AlfrescoTranslationService,
                 private activitiTaskService: TaskListService,
+                private cardViewUpdateService: CardViewUpdateService,
+                private peopleService: PeopleService,
                 private logService: LogService) {
         if (translateService) {
             translateService.addTranslationFolder('ng2-activiti-tasklist', 'assets/ng2-activiti-tasklist');
         }
+        this.peopleSearch$ = new Observable<User[]>(observer => this.peopleSearchObserver = observer).share();
+    }
+
+    ngOnInit() {
+        this.cardViewUpdateService.itemClicked$.subscribe(this.clickTaskDetails.bind(this));
     }
 
     ngOnChanges(changes: SimpleChanges) {
         console.log('change van:', changes, this.taskDetails);
+        this.showAssignee = false;
         this.refreshData();
     }
 
@@ -56,7 +77,7 @@ export class TaskHeaderComponent implements OnChanges {
         if (this.taskDetails) {
             let valueMap = new Map([[this.taskDetails.processInstanceId, this.taskDetails.processDefinitionName]]);
             this.properties = [
-                new CardViewTextItemModel({ label: 'Assignee', value: this.taskDetails.getFullName(), key: 'assignee', default: 'No assignee' } ),
+                new CardViewTextItemModel({ label: 'Assignee', value: this.taskDetails.getFullName(), key: 'assignee', default: 'No assignee', clickable: true } ),
                 new CardViewTextItemModel({ label: 'Status', value: this.getTaskStatus(), key: 'status' }),
                 new CardViewDateItemModel({ label: 'Due Date', value: this.taskDetails.dueDate, key: 'dueDate', default: 'No date', editable: true }),
                 new CardViewTextItemModel({ label: 'Category', value: this.taskDetails.category, key: 'category', default: 'No category' }),
@@ -99,5 +120,41 @@ export class TaskHeaderComponent implements OnChanges {
 
     isCompleted() {
         return !!this.taskDetails.endDate;
+    }
+
+    private clickTaskDetails(clickNotification: ClickNotification) {
+        if (clickNotification.target.key === 'assignee') {
+            this.showAssignee = true;
+        }
+    }
+
+    searchUser(searchedWord: string) {
+        this.peopleService.getWorkflowUsers(null, searchedWord)
+            .subscribe((users) => {
+                users = users.filter((user) => user.id !== this.taskDetails.assignee.id);
+                this.peopleSearchObserver.next(users);
+            },         error => this.logService.error('Could not load users'));
+    }
+
+    onCloseSearch() {
+        this.showAssignee = false;
+        console.log(this.taskDetails.assignee);
+    }
+
+    getCardViewClass() {
+        if (this.showAssignee) {
+            return 'edit-view';
+        } else {
+            return 'default-view';
+        }
+    }
+
+    assignTaskToUser(selectedUser: User) {
+        this.activitiTaskService.assignTask(this.taskDetails.id, selectedUser).subscribe(
+            (res: any) => {
+                this.logService.info('Task Assigned to ' + selectedUser.email);
+                this.assign.emit();
+            });
+        this.showAssignee = false;
     }
 }
