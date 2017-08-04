@@ -1,0 +1,14 @@
+.assignment-container{
+    padding: 10px 20px;
+    padding-bottom: 0px;
+    border-bottom: 1px solid #eee;
+    width: calc(100% - 40px);
+}
+
+adf-card-view >>> .adf-textitem-clickable-value {
+    color: #ff9100;
+}
+
+adf-card-view.edit-view >>> .adf-property[data-automation-id="header-assignee"] {
+    display: none;
+}
