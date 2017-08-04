@@ -1,6 +1,15 @@
+<div class="assignment-container" *ngIf="showAssignee">
+    <adf-people-search
+        (searchPeople)="searchUser($event)"
+        (success)="assignTaskToUser($event)"
+        (closeSearch)="onCloseSearch()"
+        [results]="peopleSearch$"
+        [type]="'assign'">
+    </adf-people-search>
+</div>
 <md-card *ngIf="taskDetails" class="adf-card-container">
     <md-card-content>
-        <adf-card-view [properties]="properties" [editable]="!isCompleted()"></adf-card-view>
+        <adf-card-view [class]="getCardViewClass()" [properties]="properties" [editable]="!isCompleted()"></adf-card-view>
     </md-card-content>
 
     <md-card-actions *ngIf="!isAssignedToMe()" class="adf-controls">
