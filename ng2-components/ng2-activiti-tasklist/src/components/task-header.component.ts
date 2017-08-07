@@ -54,11 +54,9 @@ export class TaskHeaderComponent implements OnChanges {
 
     refreshData() {
         if (this.taskDetails) {
-            let endDate: any = this.taskDetails.endDate;
-            let readOnlyForm = (endDate && !isNaN(endDate.getTime()));
             let valueMap = new Map([[this.taskDetails.processInstanceId, this.taskDetails.processDefinitionName]]);
             this.properties = [
-                new CardViewTextItemModel({ label: 'Assignee', value: this.taskDetails.getFullName(), key: 'assignee', default: 'No assignee', clickable: !readOnlyForm } ),
+                new CardViewTextItemModel({ label: 'Assignee', value: this.taskDetails.getFullName(), key: 'assignee', default: 'No assignee', clickable: !this.isCompleted() } ),
                 new CardViewTextItemModel({ label: 'Status', value: this.getTaskStatus(), key: 'status' }),
                 new CardViewDateItemModel({ label: 'Due Date', value: this.taskDetails.dueDate, key: 'dueDate', default: 'No date', editable: true }),
                 new CardViewTextItemModel({ label: 'Category', value: this.taskDetails.category, key: 'category', default: 'No category' }),
